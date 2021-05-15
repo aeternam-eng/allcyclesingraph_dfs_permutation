@@ -18,19 +18,17 @@ bool increase(std::vector<bool>& bs) {
     }
     return false; // overflow
 }
-
 template <typename T, typename F>
-void PowerSet(const std::vector<T>& v, F f) {
+void getSubconjuntos(const std::vector<T>& v, F f) {
     std::vector<bool> bitset(v.size());
 
     do {
         f(v, bitset);
     } while (increase(bitset));
 }
-
 template <typename T, typename F>
-void AllArrangements(const std::vector<T>& v, F f) {
-    PowerSet(v, [f](const std::vector<T>& v, const std::vector<bool>& bitset){
+void getArranjos(const std::vector<T>& v, F f) {
+    getSubconjuntos(v, [f](const std::vector<T>& v, const std::vector<bool>& bitset){
         std::vector<T> toPermute;
         for (std::size_t i = 0; i != v.size(); ++i) {
             if (bitset[i]) {
@@ -62,7 +60,7 @@ public:
 			itens.push_back(i);
 		}
 
-		AllArrangements(itens, [this](const auto& v) {
+		getArranjos(itens, [this](const auto& v) {
 			//v contem o arranjo atual
 			if(v.size() > 2) {
 				for(auto it = v.begin(); it != v.end(); it++) {
@@ -129,18 +127,9 @@ int main(int argc, char *argv[])
 
 	grafo.permutaGrafo();
 
-/* 	int i = 0;
-	for(auto it = grafo.getCiclos().begin(); it != grafo.getCiclos().end(); it++, i++) {
-		cout << "Ciclo " << i << ": ";
-		for(auto elemento : *it) {
-			cout << elemento << " ";
-		}
-		cout << endl;
-	}*/
-
 	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 
-	cout << "Time to end: " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << endl;
+	cout << "Tempo: " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << endl;
 
 	return 0;
 }
